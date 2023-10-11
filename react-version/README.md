@@ -32,7 +32,19 @@ Develop a simple application using [React | Python/Flask | Dart/Flutter] to conv
 **Output:** Return original temperature and converted temperature
 
 ## Complete Setup
-* Not included yet
+
+### React
+To run:
+1. ```cd react-version```
+2. ```npm run dev```
+3. If it does not open, open in browser at http://localhost:5173
+
+### Python
+Requires python installed (uses 3.12)
+
+To run:
+1. ```cd python-version```
+2. ```python app.py```
 
 ## Known Bugs
 * In development
