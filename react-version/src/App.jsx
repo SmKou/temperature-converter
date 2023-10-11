@@ -3,62 +3,86 @@ import { convert } from './convert'
 import './App.css'
 
 function App() {
-    const [tempInFahrenheit, setTempInFahrenheit] = useState(32.0)
-    const [tempInCelsius, setTempInCelsius] = useState(0.0)
-    const [tempInKelvin, setTempInKelvin] = useState(273.15)
+    const [temperature, setTemperature] = useState(0.0)
+    
+    const metrics = ['Fahrenheit', 'Celsius', 'Kelvin']
+    const [fromMetric, setFromMetric] = useState(metrics[0])
+    const [toMetric, setToMetric] = useState(metrics[1])
 
-    const getInput = (val, delta) => {
-        if (!val)
-            return;
+    const [message, setMessage] = useState('Press submit to convert a temperature.')
 
-        let n = 0
-        try { n = parseFloat(val) } 
-        catch {
-            if (delta === 'fahrenheit')
-                n = 32.0
-            else if (delta === 'kelvin')
-                n = 273.15
+    const handleSubmit = e => {
+        e.preventDefault()
+        if (fromMetric === toMetric) {
+            setMessage('You are converting to the same metric.')
+            return false
         }
 
-        const temps = convert(n, delta)
-        setTempInFahrenheit(temps.fahrenheit)
-        setTempInCelsius(temps.celsius)
-        setTempInKelvin(temps.kelvin)
+        switch (fromMetric) {
+            case metrics[0]:
+                if (temperature < -459.67) {
+                    setMessage('Fahrenheit cannot be less than -459.67 degrees.')
+                    return false
+                }
+                break
+            case metrics[1]:
+                if (temperature < -273.15) {
+                    setMessage('Celsius cannot be less than -273.15 degrees.')
+                    return false
+                }
+                break
+            case metrics[2]:
+                if (temperature < 0) {
+                    setMessage('Kelvin cannot be less than 0.')
+                    return false
+                }
+                break  
+        }
+
+        const converted = convert[fromMetric + 'To' + toMetric](temperature).toFixed(3)
+        setMessage(`${temperature} ${fromMetric} is equal to ${converted} ${toMetric}`)
     }
 
     return (
         <>
             <h1>Temperature Converter</h1>
             <hr />
-            <div className="ipt-set">
+            <form method="post" onSubmit={handleSubmit}>
                 <label>
-                    Fahrenheit:
-                    <input 
-                        type="text" 
-                        value={tempInFahrenheit} 
-                        onFocus={() => setTempInFahrenheit('')}
-                        onChange={e => getInput(e.target.value, 'fahrenheit')}
-                    />
-                 </label>
-                 <label>
-                    Celsius:
-                    <input 
-                        type="text" 
-                        value={tempInCelsius}
-                        onFocus={() => setTempInCelsius('')}
-                        onChange={e => getInput(e.target.value, 'celsius')}
-                    />
-                 </label>
-                 <label>
-                    Kelvin:
-                    <input 
-                        type="text"
-                        value={tempInKelvin}
-                        onFocus={() => setTempInKelvin('')}
-                        onChange={e => getInput(e.target.value, 'kelvin')}
-                    />
-                 </label>
-            </div>
+                    Enter a temperature:
+                    <input defaultValue={temperature} onChange={e => {
+                        const val = e.target.value
+                        if (!val)
+                            setTemperature(0)
+
+                        try {
+                            const n = parseFloat(val)
+                            setTemperature(n)
+                        } catch { setMessage('Please enter a valid number.') }
+                    }} />
+                </label>
+                <label>
+                    From:
+                    <select name="from-metric" 
+                        defaultValue={metrics[0]} 
+                        onChange={e => setFromMetric(e.target.value)}
+                    >
+                        {metrics.map(metric => <option key={metric} value={metric}>{metric}</option>)}
+                    </select>
+                </label>
+                <label>
+                    To:
+                    <select name="to-metric" 
+                        defaultValue={metrics[1]} 
+                        onChange={e => setToMetric(e.target.value)}
+                    >
+                        {metrics.map(metric => <option key={metric} value={metric}>{metric}</option>)}
+                    </select>
+                </label>
+                <input type="submit" />
+            </form>
+            <hr />
+            <div className="message-display">{message}</div>
         </>
     )
 }
