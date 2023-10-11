@@ -1,0 +1,37 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin: 1.2rem 0;
+  display: flex;
+}
+
+label * {
+  margin-left: 1.2rem;
+  padding: 0.6rem;
+}
+
+label:first-of-type,
+label:last-of-type { grid-column: span 2 }
+
+input[type=submit] {
+  width: 8rem;
+  margin: 0 auto;
+  padding: 0.8rem;
+}
+
+.message-display {
+  min-height: 2.4rem;
+  padding: 1.2rem;
+  border: 1px solid white;
+}
