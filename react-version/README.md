@@ -7,8 +7,7 @@ Temperature converter app to experiment with Python/Flask and Dart/Flutter
 ## Technologies Used
 
 - React
-- Flask
-  - Python
+- Python
 - Flutter
   - Dart
 
